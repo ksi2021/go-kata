@@ -1,6 +1,6 @@
 package main
 
-import greet "github.com/ksi2021/greetV2"
+import "github.com/ksi2021/greet"
 
 func main() {
 	greet.Hello()
