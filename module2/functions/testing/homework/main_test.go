@@ -36,7 +36,7 @@ func TestGreet(t *testing.T) {
 }
 
 func Greet(name string) string {
-	alphabet := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	alphabet := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN-OPQRSTUVWXYZ"
 
 	if strings.Contains(alphabet, string(name[0])) {
 		return fmt.Sprintf("Hello %s, you welcome!", name)
