@@ -63,7 +63,7 @@ func Select2(b *testing.B, users *map[int]User, products []Product) {
 
 	// }
 
-	*users["7"] = &User{}
+	// *users["7"] = &User{}
 
 }
 func BenchmarkSample100(b *testing.B) {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"regexp"
 	"testing"
 )
 
@@ -36,9 +36,8 @@ func TestGreet(t *testing.T) {
 }
 
 func Greet(name string) string {
-	alphabet := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN-OPQRSTUVWXYZ"
-
-	if strings.Contains(alphabet, string(name[0])) {
+	matched, _ := regexp.MatchString("[a-zA-Z]+", name)
+	if matched {
 		return fmt.Sprintf("Hello %s, you welcome!", name)
 	}
 	return fmt.Sprintf("Привет %s, добро пожаловать!", name)
