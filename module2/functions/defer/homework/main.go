@@ -22,7 +22,7 @@ var (
 func ExecuteMergeDictsJob(job *MergeDictsJob) (*MergeDictsJob, error) {
 
 	job.IsFinished = true
-
+	job.Merged = make(map[string]string)
 	// проверка длины Dicts
 	if len(job.Dicts) < 2 {
 		return job, errNotEnoughDicts
@@ -30,14 +30,12 @@ func ExecuteMergeDictsJob(job *MergeDictsJob) (*MergeDictsJob, error) {
 
 	// проверка на пустую мапу в Dicts
 	for i := range job.Dicts {
+
 		if job.Dicts[i] == nil {
 			return job, errNilDict
 		}
-	}
 
-	// добавление результатов в Merged
-	job.Merged = make(map[string]string)
-	for i := range job.Dicts {
+		// если все нормально добавляем результаты в Merged
 		for k, v := range job.Dicts[i] {
 			job.Merged[k] = v
 		}
