@@ -1,0 +1,117 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+	"strconv"
+)
+
+const (
+	PetTypeCat = iota
+	PetTypeDog = iota
+)
+
+type Pet struct {
+	Name  string
+	Month int
+	Type  int
+}
+
+type User struct {
+	Name string
+	Age  int
+}
+
+func main() {
+	humanPets := [][]string{
+		{"dog", "Alma", "8"},
+		{"cat", "Kitty", "1"},
+		{"cat", "Kuzya", "5"},
+		{"user", "13", "Rob", "Pike"},
+		{"user", "55", "Eli", "Bendersky"},
+		{"user", "34", "Brad", "Fitzpatrick"},
+		{"dog", "Cooper", "13"},
+		{"cat", "Milo", "2"},
+		{"cat", "Max", ".;№%"},
+		{"dog", "Charlie", "8"},
+		{"dog", "Dingo", "13"},
+		{"dog", "Jerry", "2"},
+		{"cat", "Lucky", "5"},
+		{"user", "21", "Dave", "Cheney"},
+		{"user", "%@#", "Petr", "Filippov"},
+	}
+
+	var objects []interface{}
+	var (
+		age     int
+		err     error
+		petType int
+	)
+Loop:
+	for i := range humanPets {
+		if humanPets[i][0] == "user" { // изменить условие чтобы определить пользователя
+			age, err := strconv.Atoi(humanPets[i][1]) // вычислить возраст используя strconv.Atoi
+
+			if err != nil { // если ошибка пропускаем пользователя
+				continue Loop
+			}
+
+			objects = append(objects, User{
+				Name: humanPets[i][2] + " " + humanPets[i][3], // заполнить имя пользователя, объединив имя, фамилию через пробел
+				Age:  age,
+			})
+
+		} else {
+			age, err = strconv.Atoi(humanPets[i][2]) // вычислить возраст используя strconv.Atoi
+			if err != nil {                          // если ошибка пропускаем питомца
+				continue Loop
+			}
+			petType = PetTypeDog
+			objects = append(objects, Pet{
+				Name:  humanPets[i][1], // заполнить имя
+				Month: age,
+				Type:  petType,
+			})
+		}
+	}
+	users, pets := groupObjects(objects)
+	fmt.Println("users", users)
+	fmt.Println("pets", pets)
+	fmt.Println("pets per human", petsHumanRatio(len(pets), len(users)))
+}
+
+func groupObjects(v []interface{}) ([]User, []Pet) {
+	var (
+		users []User
+		pets  []Pet
+	)
+	for i := range v {
+		switch v[i].(type) {
+		case User:
+			users = append(users, v[i].(User)) // добавить пользователя в users через type assertion
+		case Pet:
+			pets = append(pets, v[i].(Pet))
+		}
+	}
+	sortByAge(users)
+	sortByAge(pets)
+
+	return users, pets
+}
+
+func petsHumanRatio(petsCount, humanCount int) float64 {
+	return float64(petsCount) / float64(humanCount) // вычислить соотношение пользователей и питомцев используя type casting
+}
+
+func sortByAge(v interface{}) {
+	switch objects := v.(type) {
+	case []User:
+		sort.Slice(objects, func(i, j int) bool {
+			return objects[i].Age > objects[j].Age
+		})
+	case []Pet:
+		sort.Slice(objects, func(i, j int) bool {
+			return objects[i].Month > objects[j].Month
+		})
+	}
+}

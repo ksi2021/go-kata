@@ -1,0 +1,72 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+type User struct {
+	fullName string
+	age      int
+	income   int
+}
+
+// generateAge сгенерируй возраст от 18 до 70 лет.
+func generateAge() int {
+	// используй rand.Intn()
+	return 18 + rand.Intn(70-18+1)
+}
+
+// generateIncome сгенерируй доход от 0 до 500000.
+func generateIncome() int {
+	// используй rand.Intn()
+	return rand.Intn(500000)
+}
+
+// generateFullName сгенерируй полное имя. например "John Doe".
+func generateFullName() string {
+
+	names := []string{"bob", "anie", "max", "maria", "alex"}
+	s_names := []string{"chester", "bolt", "dexter", "ivanov", "pushkin"}
+	// создай слайс с именами и слайс с фамилиями.
+	// используй rand.Intn() для выбора случайного имени и фамилии.
+
+	return names[rand.Intn(len(names))] + " " + s_names[rand.Intn(len(s_names))]
+}
+
+func main() {
+	// Сгенерируй 1000 пользователей и заполни ими слайс users.
+	var users []User
+
+	for i := 0; i < 1000; i++ {
+		users = append(users, User{generateFullName(), generateAge(), generateIncome()})
+	}
+	MiddleAge := 0
+	MiddleIncome := 0
+	// Выведи средний возраст пользователей.
+	for i := range users {
+		MiddleAge += users[i].age
+	}
+	fmt.Println("Средний возраст = ", MiddleAge/len(users))
+	// Выведи средний доход пользователей.
+	for i := range users {
+		MiddleIncome += users[i].income
+	}
+
+	MiddleIncome = MiddleIncome / len(users)
+	fmt.Println("Средний доход = ", MiddleIncome)
+
+	userCount := 0
+	// Выведи количество пользователей, чей доход превышает средний доход.
+	for _, v := range users {
+		if v.income > MiddleIncome {
+			userCount += 1
+		}
+	}
+	fmt.Println("Кол-во людей = ", userCount)
+}

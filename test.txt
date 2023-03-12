@@ -1,0 +1,272 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"reflect"
+)
+
+func main() {
+	// sortE([]string{"Nicol", "Alice", "Zoe", "Bob", "Abie"})
+	// addAndRemove([]int{1, 2, 21312, 345345, 645674, 111, 1, 1, 1}, []int{9, 34, 5, 1111, 111, 11, 1, 1, 0})
+	// remFromSlice([]int{1, 2, 21312, 345345, 645674, 111, 1, 1, 1})
+
+	// basket := map[string]int{"orange": 5, "apple": 7,
+	// 	"mango": 3, "strawberry": 9}
+
+	// keys := make([]string, 0, len(basket))
+
+	// for k := range basket {
+	// 	keys = append(keys, k)
+	// }
+	// sort.Strings(keys)
+	// newMap := make(map[string]int)
+
+	// for _, k := range keys {
+	// 	fmt.Println(k, basket[k])
+	// 	newMap[k] = basket[k]
+	// }
+	// fmt.Println(newMap)
+	// dele(newMap, "orange")
+	// fmt.Println(newMap)
+
+	// i, j := 66, 99
+	// fmt.Println(i, j)
+	// swap(&i, &j)
+	// fmt.Println(i, j)
+	// Int := 5
+	// var e *int = &Int
+	// fmt.Println(*square(e), Int, *e)
+
+	// c := Person{16, "bob"}
+	// fmt.Println(c)
+	// person(&c)
+	// fmt.Println(c)
+	// 	a, b := 5, 4
+	// 	res := sum(&a, &b)
+	// 	fmt.Println(*res)
+	// 	b = 42
+	// 	fmt.Println(*res)
+	// 	fmt.Println(*sum(&a, &b))
+
+	// c := []int{12, 34534, 456456}
+	// b := ss(c)
+	// // b = 99
+	// *b = 0
+	// fmt.Println(c, *b)
+
+	// c := Circle{20}
+	// res := getSQ(&c)
+
+	// fmt.Println(c, *res)
+	// *res = 100
+	// fmt.Println(c, *res)
+
+	// input("asdasd")
+	// input(1212)
+	// input(1.3434)
+	// input(false)
+	// input(nil)
+
+	// m := make(map[any]int)
+	// m["test"] = 99
+	// m[234] = 99
+
+	// fmt.Println(m)
+
+	// compare(1, 2)
+	// compare(2, 2)
+	// compare(true, "asdasd")
+	// compare(45, 4.88)
+
+	// writeFileContents()
+
+	// p := Person{name: "test", age: 21}
+	// fmt.Println(p.getInfo())
+
+	// e := Employee{2000, "test", "1"}
+	// fmt.Println(e)
+	// e.priceUp(999)
+	// fmt.Println(fmt.Sprintf("%+v", e))
+
+	// st := "宣"
+	c := []int{1, 2, 3, 4, 5, 676, 234}
+
+	l := c[2:]
+	fmt.Println(c, l)
+	l = append(l, 99)
+	l = append(l, 11)
+	l = append(l, 22)
+	l = append(l, 33)
+	fmt.Println(c, l)
+}
+
+type Employee struct {
+	salaty   int
+	name     string
+	position string
+}
+
+func (e *Employee) priceUp(v int) {
+	e.salaty += v
+}
+
+type Circle struct {
+	squ int
+}
+
+func getSQ(c *Circle) *int {
+	z := &c.squ
+	return z
+}
+func dele(m map[string]int, key string) {
+	delete(m, key)
+}
+func ss(arr []int) *int {
+	s := &arr[0]
+	return s
+}
+func getMax(arr []int) {
+	length := len(arr)
+	if length < 1 {
+		return
+	}
+	temp := arr[0]
+	for i := range arr {
+		if temp < arr[i] {
+			temp = arr[i]
+		}
+	}
+
+	fmt.Println(temp)
+}
+
+type Person struct {
+	age  int
+	name string
+}
+
+func person(p *Person) {
+	p.name = "upd"
+}
+func removeRep(arr []int) {
+	length := len(arr)
+	if length < 1 {
+		return
+	}
+	temp := make(map[int]bool)
+	for i := range arr {
+		temp[arr[i]] = true
+	}
+
+	ar := make([]int, len(temp))
+	counter := 0
+	for i := range temp {
+		ar[counter] = i
+		counter++
+	}
+
+	fmt.Println(ar)
+}
+
+func sortE(arr []string) {
+	length := len(arr)
+	if length < 1 {
+		return
+	}
+
+	for i := range arr {
+		for j := range arr {
+			if arr[j] > arr[i] {
+				arr[j], arr[i] = arr[i], arr[j]
+			}
+		}
+	}
+	fmt.Println(arr)
+}
+
+func addAndRemove(arr, arr2 []int) {
+	temp := append(arr, arr2...)
+	if len(temp) < 1 {
+		return
+	}
+	M := make(map[int]bool)
+	for i := range temp {
+		M[temp[i]] = true
+	}
+
+	ar := make([]int, len(M))
+	counter := 0
+
+	for i := range M {
+		ar[counter] = i
+		counter++
+	}
+
+	fmt.Println(ar)
+}
+
+func remFromSlice(e []int) {
+	arr := make([]int, 0, len(e))
+	for i := range e {
+		if e[i] < 3 || e[i]%2 != 0 {
+		} else {
+			arr = append(arr, e[i])
+		}
+	}
+
+	fmt.Println(arr)
+}
+
+func swap(i, j *int) {
+	*i, *j = *j, *i
+}
+
+func square(link *int) *int {
+	*link *= 2
+	return link
+}
+
+func sum(a, b *int) *int {
+	c := *a + *b
+	fmt.Println(c)
+	return &c
+
+}
+func input(c interface{}) {
+	// switch c.(type) {
+	// case string:
+	// 	fmt.Println("string")
+	// case int:
+	// 	fmt.Println("int")
+	// case nil:
+	// 	fmt.Println("nil")
+	// default:
+	// 	fmt.Println("coming soon")
+	// }
+	if reflect.TypeOf(c) == reflect.TypeOf(nil) {
+		return
+	}
+	fmt.Println(reflect.TypeOf(c) == reflect.TypeOf("string"))
+	fmt.Println(fmt.Sprintf("`%v`", c))
+}
+
+func compare(a, b interface{}) {
+	fmt.Println(a == b)
+}
+func writeFileContents() {
+	content := "Something to write"
+
+	/* os.WriteFile принимает путь к файлу, []byte содержимого файла
+	и биты полномочий, в случае если файл не существует */
+
+	err := os.WriteFile("./test.txt", []byte(content), 02)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (p Person) getInfo() string {
+	return fmt.Sprintf("Имя: %s,Возраст: %d", p.name, p.age)
+}
