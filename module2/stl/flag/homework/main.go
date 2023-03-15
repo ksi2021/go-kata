@@ -21,18 +21,18 @@ func main() {
 	conf := flag.String("conf", "", "a string")
 	flag.Parse()
 	if *conf == "" {
-		panic(errors.New("Бамм"))
+		panic(errors.New("arg not found"))
 	}
 
 	file, er := os.ReadFile(*conf)
 	if er != nil {
-		panic(errors.New("Бумм"))
+		panic(er)
 	}
 
 	var config Config
 	err := json.Unmarshal(file, &config)
 	if err != nil {
-		panic(errors.New("Бимм"))
+		panic(err)
 	}
 
 	fmt.Printf("%#v\n", config)
