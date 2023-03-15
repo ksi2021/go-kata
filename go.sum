@@ -2,3 +2,5 @@ github.com/brianvoe/gofakeit/v6 v6.20.1 h1:8ihJ60OvPnPJ2W6wZR7M+TTeaZ9bml0z6oy4g
 github.com/brianvoe/gofakeit/v6 v6.20.1/go.mod h1:Ow6qC71xtwm79anlwKRlWZW6zVq9D2XHE4QSSMP/rU8=
 github.com/ksi2021/greet v0.0.0-20230216124835-3c44ec59cb6f h1:PJpZfZe8UfkyHn2N2Xi8c6+gc1WrHneMVz92ZLg3Rb4=
 github.com/ksi2021/greet v0.0.0-20230216124835-3c44ec59cb6f/go.mod h1:UAs5U5aku+eJLY9Lfk4n4x98Jfd6amvjJH0EsUaJU2I=
+github.com/mattn/go-sqlite3 v1.14.16 h1:yOQRA0RpS5PFz/oikGwBEqvAWhWg5ufRz4ETLjwpU1Y=
+github.com/mattn/go-sqlite3 v1.14.16/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
