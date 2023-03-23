@@ -25,28 +25,11 @@ type Product struct {
 	Name   string `fake:"{sentence:3}"`
 }
 
-// func BenchmarkMapUserProducts(b *testing.B) {
-// 	// Проинициализируйте карту продуктов по айди пользователей
-// 	var users = genUsers()
-// 	var products = genProducts()
-
-// 	b.ResetTimer()
-// 	for i, user := range users {
-// 		for _, product := range products { // избавьтесь от цикла в цикле
-// 			if product.UserID == user.ID {
-// 				users[i].Products = append(users[i].Products, product)
-// 			}
-// 		}
-// 	}
-
-//		// return users
-//	}
-
 func Select(b *testing.B, users []User, products []Product) {
 	// Проинициализируйте карту продуктов по айди пользователей
 
 	for i, user := range users {
-		for _, product := range products { // избавьтесь от цикла в цикле
+		for _, product := range products {
 			if product.UserID == user.ID {
 				users[i].Products = append(users[i].Products, product)
 			}
@@ -55,15 +38,14 @@ func Select(b *testing.B, users []User, products []Product) {
 
 }
 
-func Select2(b *testing.B, users *map[int]User, products []Product) {
+func Select2(b *testing.B, users map[int]User, products []Product) {
 	// Проинициализируйте карту продуктов по айди пользователей
 
-	// for _, v := range products { // избавьтесь от цикла в цикле
-	// 	users[1].Products = append(users[int(v.UserID)].Products, v)
-
-	// }
-
-	// *users["7"] = &User{}
+	for _, v := range products {
+		temp := users[int(v.UserID)]
+		temp.Products = append(users[int(v.UserID)].Products, v)
+		users[int(v.UserID)] = temp
+	}
 
 }
 func BenchmarkSample100(b *testing.B) {
@@ -84,7 +66,7 @@ func BenchmarkSample2_100(b *testing.B) {
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Select2(b, &users, products)
+		Select2(b, users, products)
 	}
 }
 
