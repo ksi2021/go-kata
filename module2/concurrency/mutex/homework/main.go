@@ -10,6 +10,7 @@ import (
 type Cache struct {
 	data map[string]interface{}
 	init bool
+	sync.Mutex
 }
 
 func NewCache() *Cache {
@@ -23,7 +24,10 @@ func (c *Cache) Set(key string, v interface{}) error {
 	if !c.init {
 		return fmt.Errorf("cache isnt initialized")
 	}
+
+	c.Lock()
 	c.data[key] = v
+	c.Unlock()
 
 	return nil
 }
@@ -51,12 +55,9 @@ func main() {
 	}
 
 	var eg errgroup.Group
-	var mutex sync.Mutex
 	for i := range keys {
 		idx := i
 		eg.Go(func() error {
-			mutex.Lock()
-			defer mutex.Unlock()
 			return cache.Set(keys[idx], idx)
 		})
 	}
