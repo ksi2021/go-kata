@@ -2,15 +2,26 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"reflect"
 	"time"
+
+	"github.com/brianvoe/gofakeit/v6"
 )
 
 var reflectedStructs map[string][]Field
 
 type Field struct {
 	Name string
-	Tags map[string]string
+	Tags map[string]string `fakesize:"2,5"`
 }
+
+type IUser struct {
+	UserDTO
+	EmailVerifyDTO
+}
+
+type IUserArr []IUser
 
 type UserDTO struct {
 	ID            int       `json:"id" db:"id" db_type:"BIGSERIAL primary key" db_default:"not null"`
@@ -38,12 +49,35 @@ type EmailVerifyDTO struct {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	structs := []interface{}{
 		UserDTO{},
 		EmailVerifyDTO{},
 	}
 
+	r := reflect.ValueOf(structs)
+	fmt.Printf("%+v\n\n", r)
+
+	_map := make(map[string]IUserArr)
+	r_map := reflect.ValueOf(_map)
+	r_map.SetMapIndex(reflect.ValueOf("test"), reflect.ValueOf(IUserArr{IUser{}}))
+	r_map.SetMapIndex(reflect.ValueOf("test2"), reflect.ValueOf(IUserArr{IUser{}}))
+	fmt.Printf("%+v\n\n", r_map)
+
 	// заполни данными структур согласно заданиям
 	reflectedStructs = make(map[string][]Field, len(structs))
-	fmt.Println(reflectedStructs)
+	for i := 0; i < len(structs); i++ {
+		n := "struct" + fmt.Sprint(i+1)
+		f := []Field{}
+		f_ := Field{}
+		for i := 0; i < rand.Intn(9)+1; i++ {
+			gofakeit.Struct(&f_)
+			f = append(f, f_)
+		}
+		reflectedStructs[n] = f
+
+	}
+
+	fmt.Printf("%+v \n", reflectedStructs)
 }
