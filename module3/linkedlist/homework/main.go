@@ -44,6 +44,10 @@ func (f *Feed) Remove(publishDate int64) {
 	current := f.start
 
 	for current.publishDate != publishDate {
+
+		if current.next == nil {
+			panic(errors.New("post not found"))
+		}
 		prev = current
 		current = current.next
 	}
@@ -139,6 +143,6 @@ func main() {
 	f.Inspect()
 
 	// удаление - 1
-	f.Remove(rightNow + 30)
+	f.Remove(rightNow + 150)
 	f.Inspect()
 }
