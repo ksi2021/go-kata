@@ -8,9 +8,9 @@ import (
 )
 
 type Cache struct {
-	data map[string]interface{}
-	init bool
-	sync.Mutex
+	data  map[string]interface{}
+	init  bool
+	mutex sync.RWMutex
 }
 
 func NewCache() *Cache {
@@ -25,18 +25,22 @@ func (c *Cache) Set(key string, v interface{}) error {
 		return fmt.Errorf("cache isnt initialized")
 	}
 
-	c.Lock()
+	c.mutex.Lock()
 	c.data[key] = v
-	c.Unlock()
+	c.mutex.Unlock()
 
 	return nil
 }
 
-func (c *Cache) Get(key string) interface{} {
+func (c *Cache) Get(key string) (interface{}, bool) {
 	if !c.init {
-		return nil
+		return nil, false
 	}
-	return c.data[key]
+	c.mutex.RLock()
+	val, ok := c.data[key]
+	c.mutex.RUnlock()
+
+	return val, ok
 }
 
 func main() {
@@ -66,4 +70,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 }
