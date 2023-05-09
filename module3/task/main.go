@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"time"
@@ -27,7 +26,6 @@ type LinkedLister interface {
 
 // LoadData загрузка данных из подготовленного json файла
 func (d *DoubleLinkedList) LoadData(path string) error {
-	// отсортировать список используя самописный QuickSort
 
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -40,22 +38,23 @@ func (d *DoubleLinkedList) LoadData(path string) error {
 	if err != nil {
 		return err
 	}
-	sort_commits := QuickSort(commits)
-	// fmt.Println(sort_commits[0])
-	// panic(nil)
 
-	for k, v := range sort_commits {
-		fmt.Println(k+1, " : ", v)
-	}
-	fmt.Println("------------------------------------")
+	// сортировка списка используя самописный QuickSort
+	sort_commits := QuickSort(commits[:150])
+
+	// for k, v := range sort_commits[:3] {
+	// 	fmt.Println(k+1, " : ", v)
+	// }
+	// fmt.Println("------------------------------------")
 	//
 	if len(sort_commits) < 1 {
 		return errors.New("not enought items")
 	}
 
 	var current *Node
+	var newNode *Node = nil
 	for _, v := range sort_commits {
-		newNode := &Node{data: &Commit{Message: v.Message, UUID: v.UUID, Date: v.Date}}
+		newNode = &Node{data: &Commit{Message: v.Message, UUID: v.UUID, Date: v.Date}}
 
 		if d.head == nil {
 			d.head = newNode
@@ -72,7 +71,6 @@ func (d *DoubleLinkedList) LoadData(path string) error {
 		}
 
 		// current = newNode
-
 		d.len++
 	}
 
@@ -113,9 +111,9 @@ func (d *DoubleLinkedList) Prev() *Node {
 }
 
 // Insert вставка элемента после n элемента
-func (d *DoubleLinkedList) Insert(n int, c Commit) error {
+func (d *DoubleLinkedList) Insert(n int, c Commit) bool {
 	if n < 1 || n > d.len {
-		return errors.New("index out of range")
+		return false
 	}
 
 	startNode := d.head
@@ -130,7 +128,7 @@ func (d *DoubleLinkedList) Insert(n int, c Commit) error {
 				startNode.next = newNode
 				newNode.prev = startNode
 				d.len++
-				return nil
+				return true
 			}
 
 			afterInsertNode := startNode.next
@@ -141,18 +139,67 @@ func (d *DoubleLinkedList) Insert(n int, c Commit) error {
 			afterInsertNode.prev = newNode
 
 			d.len++
-			return nil
+			return true
 		}
 		elementCounter++
 		startNode = startNode.next
 	}
 
-	return errors.New("index out of range")
+	return true
 }
 
 // Delete удаление n элемента
-func (d *DoubleLinkedList) Delete(n int) error {
-	panic("implement me")
+func (d *DoubleLinkedList) Delete(n int) bool {
+	temp := d.head
+	counter := 0
+
+	if d.len-1 == n {
+		if d.tail.prev != nil {
+
+			if d.tail == d.curr {
+				d.curr = d.tail.prev
+			}
+			d.tail = d.tail.prev
+			d.tail.next = nil
+
+		} else {
+			d.tail = nil
+			d.curr = nil
+			d.head = nil
+		}
+
+		d.len--
+		return true
+	}
+
+	for temp.next != nil {
+		if counter == n {
+			next := temp.next
+			prev := temp.prev
+			if d.curr == temp {
+				d.curr = next
+			}
+			if prev == nil {
+				next.prev = nil
+				d.head = next
+			} else {
+				next.prev = prev
+				prev.next = next
+			}
+
+			d.len--
+
+			return true
+		}
+		counter++
+		temp = temp.next
+	}
+
+	if counter < n {
+		return false
+	}
+
+	return false
 }
 
 // DeleteCurrent удаление текущего элемента
@@ -166,7 +213,7 @@ func (d *DoubleLinkedList) DeleteCurrent() error {
 		if next != nil {
 			prev.next = next
 			next.prev = prev
-			d.curr = prev
+			d.curr = next
 		} else {
 			prev.next = nil
 			d.curr = prev
@@ -177,9 +224,12 @@ func (d *DoubleLinkedList) DeleteCurrent() error {
 		if next != nil {
 			next.prev = nil
 			d.curr = next
+			d.head = next
 			d.len--
 			return nil
 		} else {
+			d.head = nil
+			d.tail = nil
 			d.curr = nil
 		}
 	}
@@ -207,20 +257,27 @@ func (d *DoubleLinkedList) Index() (int, error) {
 
 // Pop Операция Pop
 func (d *DoubleLinkedList) Pop() *Node {
-	last := d.tail
-	prev := d.tail.prev
-	if last == nil {
+
+	if d.len < 1 {
 		return nil
 	}
-	if prev == nil {
+
+	del := d.tail
+
+	if del.prev == nil {
+		d.head = nil
 		d.tail = nil
-		return last
+		d.curr = nil
+	} else {
+		d.tail = del.prev
+		d.tail.next = nil
+		if d.curr == del {
+			d.curr = d.tail
+		}
 	}
-	d.tail = prev
-	d.tail.next = nil
 
 	d.len--
-	return last
+	return del
 }
 
 // Shift операция shift
@@ -251,7 +308,7 @@ func (d *DoubleLinkedList) SearchUUID(uuID string) *Node {
 
 	SearchNode := d.head
 
-	for SearchNode.next != nil {
+	for SearchNode != nil {
 		if SearchNode.data.UUID == uuID {
 			return SearchNode
 		}
@@ -278,7 +335,22 @@ func (d *DoubleLinkedList) Search(message string) *Node {
 
 // Reverse возвращает перевернутый список
 func (d *DoubleLinkedList) Reverse() *DoubleLinkedList {
-	panic("implement me")
+	var temp *Node
+	current := d.head
+
+	for current != nil {
+		temp = current.prev
+		current.prev = current.next
+		current.next = temp
+		current = current.prev
+	}
+
+	if temp != nil {
+		d.head = temp.prev
+	}
+
+	d.curr = d.head
+	return d
 }
 
 type Node struct {
@@ -291,11 +363,6 @@ type Commit struct {
 	Message string    `json:"message"`
 	UUID    string    `json:"uuid"`
 	Date    time.Time `json:"date"`
-}
-
-func GenerateJSON() {
-	// Дополнительное задание написать генератор данных
-	// используя библиотеку gofakeit
 }
 
 func QuickSort(arr []Commit) []Commit {
@@ -336,33 +403,42 @@ func main() {
 		panic(err)
 	}
 
-	// c := Commit{Message: "test message"}
-	// fmt.Println(test.Insert(0, c))
-	fmt.Printf("test 1 -- %+v \n", test.Current().data)
-	fmt.Printf("test 2 -- %+v \n", test.Next().data)
-	// fmt.Printf("test 3 -- %+v \n", test.Current().data)
-	fmt.Printf("test delete -- %+v \n", test.DeleteCurrent())
-	fmt.Printf("test delete -- %+v \n", test.DeleteCurrent())
-	fmt.Printf("test 5 -- %+v \n", test.Current().data)
-	// fmt.Printf("test 6 -- %+v \n", test.Next().data)
-	// fmt.Printf("test 7 -- %+v \n", test.Next().data)
-	// fmt.Printf("test 8 -- %+v \n", test.Next().data)
-	// fmt.Printf("test 9 -- %+v \n", test.Next().data)
-	// fmt.Printf("test 10 -- %+v \n", test.Next().data)
-	fmt.Printf("test head -- %+v \n", test.tail.data)
+	// test.Reverse()
+	// fmt.Printf("el f = %+v \n ", test.Current())
+	// fmt.Printf("el f = %+v \n ", test.head)
+	// // fmt.Printf("el f = %+v \n ", test.Next())
+	// // fmt.Printf("el f = %+v \n ", test.Next())
 
-	// fmt.Println(test.Insert(1, c))
-	// fmt.Println(test.SearchUUID("6957a0ae-875b-11ed-8150-acde48001122213"))
-	// fmt.Println(test.Pop().data.Message)
-	// fmt.Println(test.tail.prev.data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift().data.Message)
-	// fmt.Println(test.Shift())
-	fmt.Printf("len-- %+v \n ", test.Len())
+	// // fmt.Printf("el reverse = %+v \n ", test.Reverse())
+
+	// // fmt.Printf("el 1 = %+v \n ", test.head.data.Message)
+	// // fmt.Printf("el 2 = %+v \n ", test.head.next.data.Message)
+	// // fmt.Printf("el 3 = %+v \n ", test.head.next.next.data.Message)
+
+	// // fmt.Printf("el f = %+v \n ", test.Index(0))
+
+	// // fmt.Printf("el reverse = %+v \n ", test.tail.data.Message)
+	// // fmt.Printf("el reverse = %+v \n ", test.tail.prev.data.Message)
+	// // fmt.Printf("el reverse = %+v \n ", test.tail.prev.prev.data.Message)
+	// // temp := test.head
+	// // i := 1
+	// // for temp != nil {
+	// // 	fmt.Printf("el № %d -- %+v \n", i, temp.data.Message)
+	// // 	i++
+	// // 	temp = temp.next
+	// // }
+
+	// // fmt.Printf("el reverse = %+v \n ", test.Reverse())
+
+	// // temp := test.head
+	// // i := 1
+	// // for temp != nil {
+	// // 	fmt.Printf("el № %d -- %+v \n", i, temp.data.Message)
+	// // 	i++
+	// // 	temp = temp.next
+	// // }
+	// // fmt.Printf("el curr = %+v \n ", test.Current().data.Message)
+	// // fmt.Printf("el curr = %+v \n ", test.tail)
+	// fmt.Printf("len-- %+v \n ", test.Len())
 
 }
