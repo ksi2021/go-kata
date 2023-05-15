@@ -146,23 +146,4 @@ func main() {
 		fmt.Printf("Humidity in "+city+": %d\n", humidity)
 		fmt.Printf("Wind speed in "+city+": %d\n\n", windSpeed)
 	}
-
-	// 9e4e114128cb5762e995e0abd0216124
-
-	// resp, err := http.Get(`http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=716e25cdfd1e6b22bc2d21d1f916341c`)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// data, _ := io.ReadAll(resp.Body)
-	// // fmt.Println(resp.StatusCode, data, string(data))
-	// t, er := UnmarshalTest(data)
-	// fmt.Printf("%v \t %+v ", er, t.Main)
-
-	// data := []byte(`{"coord":{"lon":-0.1257,"lat":51.5085},"weather":[{"id":801,"main":"Clouds","description":"few clouds","icon":"02n"}],"base":"stations","main":{"temp":10.4,"feels_like":9.35,"temp_min":8.36,"temp_max":11.86,"pressure":1022,"humidity":71},"visibility":10000,"wind":{"speed":2.06,"deg":60},"clouds":{"all":18},"dt":1684184763,"sys":{"type":2,"id":2075535,"country":"GB","sunrise":1684123758,"sunset":1684179874},"timezone":3600,"id":2643743,"name":"London","cod":200}`)
-	// // t, e := UnmarshalTest(data)
-	// _ = data
-
-	// dd, err := UnmarshalTest(data)
-
-	// fmt.Printf("%+v \t \n \n %v", dd.Main.Temp, err)
 }
