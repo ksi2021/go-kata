@@ -22,7 +22,6 @@ type SaleType struct {
 }
 
 type SalePricing struct {
-	// Sales   []SaleType
 	Sale SaleType
 }
 
@@ -41,14 +40,6 @@ func (r RegularPricing) getName() string {
 func (s SalePricing) getName() string {
 	return s.Sale.Event
 }
-
-// type Facade struct {
-// 	Strategy PricingStrategy
-// }
-
-// func initFacade(strategy PricingStrategy) Facade {
-// 	return Facade{Strategy: strategy}
-// }
 
 func main() {
 
