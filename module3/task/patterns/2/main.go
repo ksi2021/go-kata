@@ -37,6 +37,7 @@ func (proxy *AirConditionerProxy) TurnOff() {
 	proxy.AirConditioner.TurnOff()
 	proxy.Logger = append(proxy.Logger, "Turn off the air condition")
 }
+
 func (proxy *AirConditionerProxy) TurnOn() {
 	if !proxy.Auth {
 		proxy.Logger = append(proxy.Logger, "Access denied: authentication required to turn on the air condition")
@@ -45,6 +46,7 @@ func (proxy *AirConditionerProxy) TurnOn() {
 	proxy.AirConditioner.TurnOn()
 	proxy.Logger = append(proxy.Logger, "Turn on the air condition")
 }
+
 func (proxy *AirConditionerProxy) SetTemperature(temp int) {
 	if !proxy.Auth {
 		proxy.Logger = append(proxy.Logger, "Access denied: authentication required to set temperature of the air condition")
