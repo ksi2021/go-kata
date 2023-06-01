@@ -2,6 +2,7 @@ package repository
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -113,11 +114,16 @@ func (repo *FileTaskRepository) UpdateTask(task Task) (Task, error) {
 		return task, err
 	}
 
+	found := false
 	for i, t := range tasks {
 		if t.ID == task.ID {
 			tasks[i] = task
+			found = true
 			break
 		}
+	}
+	if !found {
+		return task, fmt.Errorf("task not found")
 	}
 
 	if err := repo.SaveTasks(tasks); err != nil {
@@ -129,7 +135,7 @@ func (repo *FileTaskRepository) UpdateTask(task Task) (Task, error) {
 
 func (repo *FileTaskRepository) DeleteTask(id int) error {
 	tasks, err := repo.GetTasks()
-
+	found := false
 	if err != nil {
 		return err
 	}
@@ -139,7 +145,13 @@ func (repo *FileTaskRepository) DeleteTask(id int) error {
 	for _, t := range tasks {
 		if t.ID != id {
 			newTasks = append(newTasks, t)
+		} else {
+			found = true
 		}
+	}
+
+	if !found {
+		return fmt.Errorf("task not found")
 	}
 
 	if err := repo.SaveTasks(newTasks); err != nil {

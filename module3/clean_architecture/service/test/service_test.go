@@ -10,19 +10,19 @@ func TestGetList(t *testing.T) {
 
 	tests := []struct {
 		name string
-		want error
+		want bool
 	}{
 		{
 			name: "GetList 1",
-			want: nil,
+			want: true,
 		},
 		{
 			name: "GetList 2",
-			want: nil,
+			want: true,
 		},
 		{
 			name: "GetList 3",
-			want: nil,
+			want: true,
 		},
 	}
 
@@ -41,22 +41,22 @@ func TestCreateTodo(t *testing.T) {
 	tests := []struct {
 		name string
 		data string
-		want error
+		want bool
 	}{
 		{
 			name: "CreateTodo 1",
 			data: "data #1",
-			want: nil,
+			want: true,
 		},
 		{
 			name: "CreateTodo 2",
 			data: "data #2",
-			want: nil,
+			want: true,
 		},
 		{
 			name: "CreateTodo 3",
 			data: "data #3",
-			want: nil,
+			want: true,
 		},
 	}
 
@@ -75,22 +75,22 @@ func TestCompleteTodo(t *testing.T) {
 	tests := []struct {
 		name string
 		data Task
-		want error
+		want bool
 	}{
 		{
 			name: "CompleteTodo 2 #1",
 			data: Task{Title: "complete 1", ID: 1},
-			want: nil,
+			want: true,
 		},
 		{
 			name: "CompleteTodo 2",
-			data: Task{Title: "complete 2", ID: 2},
-			want: nil,
+			data: Task{Title: "complete 2", ID: 200},
+			want: false,
 		},
 		{
 			name: "CompleteTodo 2",
-			data: Task{Title: "complete 2", ID: 3},
-			want: nil,
+			data: Task{Title: "complete 2", ID: 3001},
+			want: false,
 		},
 	}
 
@@ -108,17 +108,17 @@ func TestRemoveTodo(t *testing.T) {
 	tests := []struct {
 		name string
 		data Task
-		want error
+		want bool
 	}{
 		{
 			name: "RemoveTodo 1",
 			data: Task{Title: "complete 3", ID: 3},
-			want: nil,
+			want: true,
 		},
 		{
 			name: "RemoveTodo 2",
-			data: Task{Title: "complete 3", ID: 100},
-			want: nil,
+			data: Task{Title: "complete 3", ID: 888888},
+			want: false,
 		},
 	}
 
@@ -130,4 +130,5 @@ func TestRemoveTodo(t *testing.T) {
 			}
 		})
 	}
+
 }

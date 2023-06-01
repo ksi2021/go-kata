@@ -17,37 +17,37 @@ func MakeService(path string) *todoService {
 	return &todoService{repository: &FileTaskRepository{FilePath: path}}
 }
 
-func (s *todoService) ListTodos() ([]Task, error) {
+func (s *todoService) ListTodos() ([]Task, bool) {
 	tasks, err := s.repository.GetTasks()
 
 	if err != nil {
-		return nil, err
+		return nil, false
 	}
 
-	return tasks, err
+	return tasks, true
 }
 
-func (s *todoService) CreateTodo(title string) error {
+func (s *todoService) CreateTodo(title string) bool {
 	todo := Task{Title: title}
 	if _, err := s.repository.CreateTask(todo); err != nil {
-		return err
+		return false
 	}
 
-	return nil
+	return true
 }
 
-func (s *todoService) CompleteTodo(todo Task) error {
+func (s *todoService) CompleteTodo(todo Task) bool {
 	todo.Status = true
 	if _, err := s.repository.UpdateTask(todo); err != nil {
-		return err
+		return false
 	}
 
-	return nil
+	return true
 }
 
-func (s *todoService) RemoveTodo(todo Task) error {
+func (s *todoService) RemoveTodo(todo Task) bool {
 	if err := s.repository.DeleteTask(todo.ID); err != nil {
-		return err
+		return false
 	}
-	return nil
+	return true
 }
