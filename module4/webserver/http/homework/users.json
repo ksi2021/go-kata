@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "username": "Cardenas ",
+    "email": "cardenashebert@isodrive.com",
+    "password": "Laboris ea laboris et in aliqua ad occaecat minim occaecat mollit aute minim labore."
+  },
+  {
+    "id": 2,
+    "username": "Karina ",
+    "email": "karinahebert@isodrive.com",
+    "password": "Id nostrud irure irure anim."
+  },
+  {
+    "id": 3,
+    "username": "Daisy ",
+    "email": "daisyhebert@isodrive.com",
+    "password": "Occaecat aliquip consequat et nulla do aliquip minim occaecat."
+  },
+  {
+    "id": 4,
+    "username": "Sanders ",
+    "email": "sandershebert@isodrive.com",
+    "password": "Aliquip esse ad proident sit aliqua culpa."
+  },
+  {
+    "id": 5,
+    "username": "Frankie ",
+    "email": "frankiehebert@isodrive.com",
+    "password": "Proident aliquip veniam Lorem commodo aliquip nulla ad consequat labore occaecat dolore."
+  },
+  {
+    "id": 6,
+    "username": "test_pass",
+    "email": "test_email",
+    "password": "test_user"
+  },
+  {
+    "id": 7,
+    "username": "test_pass",
+    "email": "test_email",
+    "password": "test_user"
+  },
+  {
+    "id": 8,
+    "username": "test_pass",
+    "email": "test_email",
+    "password": "test_user"
+  }
+]
