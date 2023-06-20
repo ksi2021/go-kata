@@ -1,7 +1,7 @@
 package service
 
 import (
-	. "github.com/ksi2021/go-kata/module4/webserver/http/homework/repository/user"
+	. "github.com/ksi2021/go-kata/module4/webserver/http/homework/repository"
 )
 
 type TodoService interface {

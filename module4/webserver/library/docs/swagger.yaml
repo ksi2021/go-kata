@@ -1,0 +1,173 @@
+basePath: /
+definitions:
+  main.Author:
+    properties:
+      books:
+        description: связь с таблицей книги
+        items:
+          $ref: '#/definitions/main.Book'
+        type: array
+      id:
+        description: ID как первичный ключ
+        type: integer
+      name:
+        description: имя автора
+        type: string
+    type: object
+  main.Book:
+    properties:
+      author:
+        allOf:
+        - $ref: '#/definitions/main.Author'
+        description: связь с таблицей автор
+      authorID:
+        description: ID автора как внешний ключ
+        type: integer
+      id:
+        description: ID как первичный ключ
+        type: integer
+      title:
+        description: название книги
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/main.User'
+        description: связь с таблицей пользователь
+      userID:
+        description: ID пользователя как внешний ключ
+        type: integer
+    type: object
+  main.User:
+    properties:
+      id:
+        description: ID как первичный ключ
+        type: integer
+      name:
+        description: имя пользователя
+        type: string
+      rentedBooks:
+        description: связь с таблицей книги
+        items:
+          $ref: '#/definitions/main.Book'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: copy of the swagger Library
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Library Rest API
+  version: "1.0"
+paths:
+  /createAuthor:
+    post:
+      operationId: author-create-handler
+      parameters:
+      - description: Author name
+        in: formData
+        name: name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/main.Author'
+        "400":
+          description: Invalid input
+        "500":
+          description: Invalid data
+      summary: Create new Author
+  /createBook:
+    post:
+      operationId: book-create-handler
+      parameters:
+      - description: book title
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Author ID
+        in: formData
+        name: author_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/main.Book'
+        "400":
+          description: Invalid input
+        "500":
+          description: Invalid data
+      summary: Create new book
+  /getAuthors:
+    get:
+      description: Получение авторов вместе с их книгами.
+      operationId: authors-get-handler
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/main.Author'
+        "500":
+          description: Internal Server Error
+      summary: GetAuthors
+  /getBooks:
+    get:
+      description: Получение всех книг вместе с авторами.
+      operationId: books-get-handler
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/main.Book'
+        "500":
+          description: Internal Server Error
+      summary: GetBooks
+  /getUsers:
+    get:
+      description: Получение пользователей вместе с книгами.
+      operationId: users-get-handler
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/main.User'
+        "500":
+          description: Internal Server Error
+      summary: GetUsers
+  /takeBook:
+    post:
+      operationId: book-take-handler
+      parameters:
+      - description: Book ID
+        in: formData
+        name: book_id
+        required: true
+        type: string
+      - description: User ID
+        in: formData
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/main.Book'
+        "400":
+          description: Invalid input
+        "500":
+          description: Invalid data
+      summary: Take a book
+swagger: "2.0"
