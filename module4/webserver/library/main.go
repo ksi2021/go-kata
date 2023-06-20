@@ -50,35 +50,6 @@ func main() {
 	r.Post("/takeBook", controller.TakeBook)
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
-	//
-	//// pets paths
-	//petController := NewPetController()
-	//r.Post("/pet", petController.PetCreate)
-	//r.Get("/pet/{petID:[0-9]+}", petController.PetGetByID)
-	//r.Delete("/pet/{petID:[0-9]+}", petController.PetDeleteByID)
-	//r.Post("/pet/{petID:[0-9]+}/uploadImage", petController.PetUploadImage)
-	//r.Get("/pet/findByStatus", petController.PetFindByStatus)
-	//r.Post("/pet/{petID:[0-9]+}", petController.PetUpdate)
-	//r.Put("/pet", petController.PetFullUpdate)
-	//
-	//// user paths
-	//userController := NewUserController()
-	//r.Post("/user", userController.UserCreate)
-	//r.Post("/user/createWithList", userController.UserCreateWithList)
-	//r.Post("/user/createWithArray", userController.UserCreateWithList)
-	//r.Get("/user/{Username:[a-zA-Z]+}", userController.UserGetByUsername)
-	//r.Delete("/user/{Username:[a-zA-Z]+}", userController.UserDeleteByUsername)
-	//r.Put("/user/{Username:[a-zA-Z]+}", userController.UserUpdate)
-	//
-	//// store paths
-	//orderController := NewOrderController()
-	//r.Get("/store/inventory", orderController.OrderGetInventory)
-	//r.Get("/store/order/{orderID:[0-9]+}", orderController.OrderGetByID)
-	//r.Delete("/store/order/{orderID:[0-9]+}", orderController.OrderDeleteByID)
-	//r.Post("/store/order", orderController.OrderCreate)
-	//
-	//// swagger path
-	//r.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	srv := &http.Server{
 		Addr:    port,
